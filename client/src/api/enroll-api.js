@@ -39,15 +39,6 @@ const update = async (data, id) => {
   }
 };
 
-const remove = async (data, id) => {
-  try {
-    const response = await axios
-      .post(`${baseUrl.server}/api/enroll/remove/${id}`, data, { headers });
-    return response.data;
-  } catch (err) {
-    console.log(err);
-    return err.response.data;
-  }
-};
 
-export { create, readByStudent, update, remove };
+
+export { create, readByStudent, update };

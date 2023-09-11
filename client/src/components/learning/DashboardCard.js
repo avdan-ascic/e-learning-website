@@ -10,11 +10,11 @@ import {
   FormControlLabel,
   Checkbox,
   Box,
-  Button,
+
 } from "@mui/material";
 import { UserContext } from "../../App";
 import { binaryToBase64 } from "../../helpers/image-format-converter";
-import { update, remove } from "../../api/enroll-api";
+import { update } from "../../api/enroll-api";
 
 const DashboardCard = ({ course, index, completed, readCourses }) => {
   const { userInfo } = useContext(UserContext);
@@ -33,12 +33,6 @@ const DashboardCard = ({ course, index, completed, readCourses }) => {
       { studentId: userInfo.id, isCompleted: event.target.checked },
       course._id
     )
-      .then(() => readCourses())
-      .catch((err) => console.log(err));
-  };
-
-  const handleRemove = () => {
-    remove({ studentId: userInfo.id }, course._id)
       .then(() => readCourses())
       .catch((err) => console.log(err));
   };
@@ -99,18 +93,6 @@ const DashboardCard = ({ course, index, completed, readCourses }) => {
                 label="Completed"
               />
             )}
-            <Button
-              variant="contained"
-              sx={{
-                backgroundColor: "#204e59",
-                "&:hover": {
-                  backgroundColor: "#154043",
-                },
-              }}
-              onClick={handleRemove}
-            >
-              Remove
-            </Button>
           </Box>
         </CardActions>
       </Card>

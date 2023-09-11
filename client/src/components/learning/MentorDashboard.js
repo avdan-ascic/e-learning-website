@@ -167,6 +167,12 @@ const MentorDashboard = () => {
           rows={rows}
           columns={columns}
           getRowHeight={() => "auto"}
+          initialState={{
+            pagination: {
+              paginationModel: { page: 0, pageSize: 5 },
+            },
+          }}
+          pageSizeOptions={5}
           disableRowSelectionOnClick
         />
       </Box>

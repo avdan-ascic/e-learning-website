@@ -10,6 +10,11 @@ import {
   FormControl,
   Select,
   Grid,
+  Dialog,
+  DialogActions,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -48,6 +53,15 @@ const EditProfile = () => {
   const [infoImage, setInfoImage] = useState();
   const [displayImage, setDisplayImage] = useState();
   const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   useEffect(() => {
     isAuthenticated()
@@ -193,6 +207,7 @@ const EditProfile = () => {
             ...remPassword,
             error: data.error,
           });
+          handleClose()
         } else {
           setRemPassword({ ...remPassword, error: "" });
           setLoggedIn(false);
@@ -437,7 +452,7 @@ const EditProfile = () => {
           >
             <Button
               variant="contained"
-              onClick={handleRemove}
+              onClick={handleClickOpen}
               sx={{
                 backgroundColor: "#204e59",
                 "&:hover": {
@@ -450,6 +465,28 @@ const EditProfile = () => {
           </Box>
         </Box>
       )}
+
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+        DELETE ACCOUNT
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Are you sure ?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleRemove} autoFocus>
+           OK
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 };

@@ -115,6 +115,14 @@ const AdminAddCourse = () => {
       });
       return false;
     }
+    if (selectedMentors.length === 0) {
+      setValues({
+        ...values,
+        error: "Please select at least one mentor!",
+        redirect: false,
+      });
+      return false;
+    }
     return true;
   };
 

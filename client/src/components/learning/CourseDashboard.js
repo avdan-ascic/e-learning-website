@@ -144,10 +144,21 @@ const CourseDashboard = () => {
           overflowY: "auto",
         }}
       >
-        <DataGrid rows={rows} columns={columns} disableRowSelectionOnClick />
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          initialState={{
+            pagination: {
+              paginationModel: { page: 0, pageSize: 5 },
+            },
+          }}
+          pageSizeOptions={5}
+          disableRowSelectionOnClick
+        />
       </Box>
     </Box>
   );
 };
 
 export default CourseDashboard;
+

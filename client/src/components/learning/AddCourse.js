@@ -37,6 +37,7 @@ const AddCourse = () => {
   const [selectedMentors, setSelectedMentors] = useState([]);
   const [courseImage, setCourseImage] = useState();
   const [displayImage, setDisplayImage] = useState();
+  const [currentUserMentorId, setCurrentUserMentorId] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -47,6 +48,7 @@ const AddCourse = () => {
 
         if (!data.user.active) return navigate("/locked");
         if (data.user.role === "student") return navigate("/");
+        setCurrentUserMentorId(data.user.id);
         setSelectedMentors([data.user.id]);
       })
       .catch((err) => console.log(err));
@@ -64,6 +66,7 @@ const AddCourse = () => {
   const handleChange = (name) => (event) => {
     setValues({ ...values, [name]: event.target.value });
   };
+
   const handleImageChange = (event) => {
     setCourseImage(event.target.files[0]);
     const file = event.target.files[0];
@@ -124,6 +127,15 @@ const AddCourse = () => {
       });
       return false;
     }
+
+    if (selectedMentors.length === 0) {
+      setValues({
+        ...values,
+        error: "Please select at least one mentor!",
+        redirect: false,
+      });
+      return false;
+    }
     return true;
   };
 
@@ -159,6 +171,15 @@ const AddCourse = () => {
     }
     // eslint-disable-next-line
   }, [values.redirect]);
+
+  const handleDeleteMentor = (mentorId) => {
+    if (mentorId === currentUserMentorId) {
+      return;
+    }
+    setSelectedMentors((prevMentors) =>
+      prevMentors.filter((mentor) => mentor !== mentorId)
+    );
+  };
 
   return (
     <Container>
@@ -286,11 +307,7 @@ const AddCourse = () => {
                       mentors[mentors.findIndex((obj) => obj._id === mentor)]
                         ?.lastName
                     }
-                    onDelete={() =>
-                      setSelectedMentors(
-                        selectedMentors.filter((m) => m !== mentor)
-                      )
-                    }
+                    onDelete={() => handleDeleteMentor(mentor)}
                   />
                 );
               })}

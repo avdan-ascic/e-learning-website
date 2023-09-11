@@ -45,14 +45,18 @@ const UserDashboard = () => {
       sortable: false,
       width: 70,
       renderCell: (cellValues) => {
-        return (
-          <Checkbox
-            checked={cellValues.row.active}
-            onClick={() =>
-              handleChangeActive(cellValues.id, cellValues.row.active)
-            }
-          />
-        );
+        if (userInfo.role === "admin" && cellValues.id === userInfo.id) {
+          return <Checkbox checked={cellValues.row.active} disabled />;
+        } else {
+          return (
+            <Checkbox
+              checked={cellValues.row.active}
+              onClick={() =>
+                handleChangeActive(cellValues.id, cellValues.row.active)
+              }
+            />
+          );
+        }
       },
     },
     {
@@ -61,14 +65,20 @@ const UserDashboard = () => {
       sortable: false,
       width: 70,
       renderCell: (cellValues) => {
-        return (
-          <Checkbox
-            checked={cellValues.row.role !== "student"}
-            onClick={() =>
-              handleChangeMentor(cellValues.id, cellValues.row.role)
-            }
-          />
-        );
+        if (userInfo.role === "admin" && cellValues.id === userInfo.id) {
+          return (
+            <Checkbox checked={cellValues.row.role !== "student"} disabled />
+          );
+        } else {
+          return (
+            <Checkbox
+              checked={cellValues.row.role !== "student"}
+              onClick={() =>
+                handleChangeMentor(cellValues.id, cellValues.row.role)
+              }
+            />
+          );
+        }
       },
     },
     {
@@ -133,6 +143,10 @@ const UserDashboard = () => {
   };
 
   const handleChangeActive = (id, status) => {
+    if (userInfo.role === "admin" && id === userInfo.id) {
+      return;
+    }
+
     setActive({ userId: id, status: !status })
       .then(() => {
         let tempArr = [...rows];
@@ -144,6 +158,10 @@ const UserDashboard = () => {
   };
 
   const handleChangeMentor = (id, role) => {
+    if (userInfo.role === "admin" && id === userInfo.id) {
+      return;
+    }
+
     const newRole = role === "student" ? "mentor" : "student";
     setMentor({ userId: id, role: newRole }).then(() => {
       let tempArr = [...rows];
@@ -192,7 +210,16 @@ const UserDashboard = () => {
           overflowY: "auto",
         }}
       >
-        <DataGrid rows={rows} columns={columns} disableRowSelectionOnClick />
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          initialState={{
+            pagination: {
+              paginationModel: { page: 0, pageSize: 5 },
+            },
+          }}
+          pageSizeOptions={5}
+        />
       </Box>
     </Box>
   );
